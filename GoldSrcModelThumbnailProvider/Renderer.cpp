@@ -1,7 +1,5 @@
 #include <Windows.h>
 #include <wrl/client.h>
-#include <atlbase.h>
-#include <wincodec.h> // For WIC
 #include <d3d11_1.h>
 #include <dxgi1_2.h>
 #include <DirectXMath.h>
