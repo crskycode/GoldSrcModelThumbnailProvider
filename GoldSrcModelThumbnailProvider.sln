@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35201.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoldSrcModelThumbnailProvider", "GoldSrcModelThumbnailProvider\GoldSrcModelThumbnailProvider.vcxproj", "{3E402A58-3BAD-454E-8256-6E1C619103B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{347990A1-3CB5-4619-A14A-D5DD25A6EF57}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Debug|x64.ActiveCfg = Debug|x64
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Debug|x64.Build.0 = Debug|x64
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Debug|x86.ActiveCfg = Debug|Win32
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Debug|x86.Build.0 = Debug|Win32
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Release|x64.ActiveCfg = Release|x64
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Release|x64.Build.0 = Release|x64
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Release|x86.ActiveCfg = Release|Win32
+		{3E402A58-3BAD-454E-8256-6E1C619103B3}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9C9099B-5211-4442-9F9D-E6B9B1770554}
+	EndGlobalSection
+EndGlobal
