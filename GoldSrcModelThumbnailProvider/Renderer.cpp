@@ -430,14 +430,7 @@ public:
 
 HRESULT RenderToBitmap(const std::wstring& filePath, UINT width, UINT height, HBITMAP* outBitmap)
 {
-	__try
-	{
-		auto renderer = std::make_unique<Renderer>();
+	auto renderer = std::make_unique<Renderer>();
 
-		return renderer->RenderToBitmap(filePath, width, height, outBitmap);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		return E_OUTOFMEMORY;
-	}
+	return renderer->RenderToBitmap(filePath, width, height, outBitmap);
 }
