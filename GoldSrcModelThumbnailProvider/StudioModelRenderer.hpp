@@ -1399,7 +1399,7 @@ private:
 
 		std::transform(fileName.begin(), fileName.end(), fileName.begin(), [](int c) { return std::tolower(c); });
 
-		if (fileName.starts_with(L"v_"))
+		if (fileName.starts_with(L"v_") || fileName.starts_with(L"pv-"))
 			return ModelCategory::Gun;
 
 		return ModelCategory::Normal;
