@@ -104,6 +104,9 @@ IFACEMETHODIMP CModelThumbProvider::GetThumbnail(UINT cx, HBITMAP* phbmp, WTS_AL
 {
 	__try
 	{
+		if (cx < 64)
+			cx = 64;
+
 		HRESULT hr = RenderToBitmap(m_FilePath, cx, cx, phbmp);
 
 		if (FAILED(hr))
