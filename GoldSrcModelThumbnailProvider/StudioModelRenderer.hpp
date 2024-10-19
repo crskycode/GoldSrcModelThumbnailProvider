@@ -1473,7 +1473,7 @@ private:
 				fov = 90;
 				break;
 			default:
-				Eye = XMVectorSet(-cameraDistance, 0.0f, cameraDistance * 0.25, 0.0f);
+				Eye = XMVectorSet(-cameraDistance, 0.0f, cameraDistance * 0.5, 0.0f);
 		}
 
 		m_View = XMMatrixLookAtLH(Eye, At, Up);
