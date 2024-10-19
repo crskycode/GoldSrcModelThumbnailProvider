@@ -1354,6 +1354,31 @@ private:
 		if (FAILED(hr))
 			return hr;
 
+		//
+		// Create blend state
+		//
+
+		D3D11_BLEND_DESC blend{};
+		blend.RenderTarget[0].BlendEnable = TRUE;
+		blend.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blend.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+		blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		hr = m_D3DDevice->CreateBlendState(&blend, m_BlendState.ReleaseAndGetAddressOf());
+
+		if (FAILED(hr))
+			return hr;
+
+		//
+		// Use blending
+		// 
+
+		m_D3DDeviceContext->OMSetBlendState(m_BlendState.Get(), NULL, 0xffffffff);
+
 		return S_OK;
 	}
 
@@ -1687,6 +1712,7 @@ private:
 	ComPtr<ID3D11Buffer> m_MatrixBuffer;
 	ComPtr<ID3D11Buffer> m_BoneBuffer;
 	ComPtr<ID3D11SamplerState> m_SamplerState;
+	ComPtr<ID3D11BlendState> m_BlendState;
 
 	XMMATRIX m_World;
 	XMMATRIX m_View;
