@@ -1397,7 +1397,7 @@ private:
 
 		std::wstring fileName = path.stem().wstring();
 
-		_wcslwr_s(fileName.data(), fileName.capacity());
+		std::transform(fileName.begin(), fileName.end(), fileName.begin(), [](int c) { return std::tolower(c); });
 
 		if (fileName.starts_with(L"v_"))
 			return ModelCategory::Gun;
