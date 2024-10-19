@@ -14,6 +14,7 @@
 
 using Microsoft::WRL::ComPtr;
 
+using DirectX::XMFLOAT3;
 using DirectX::XMVECTOR;
 using DirectX::XMMATRIX;
 using DirectX::XMVectorSet;
@@ -320,6 +321,17 @@ private:
 			pixels[pixel_offset + 1] = palette[color_offset + 1];
 			pixels[pixel_offset + 2] = palette[color_offset + 2];
 			pixels[pixel_offset + 3] = 0xff;
+
+			if (studioTexture->flags & STUDIO_NF_MASKED)
+			{
+				if (indices[i] == 255)
+				{
+					pixels[pixel_offset + 0] = 0;
+					pixels[pixel_offset + 1] = 0;
+					pixels[pixel_offset + 2] = 0;
+					pixels[pixel_offset + 3] = 0;
+				}
+			}
 		}
 
 		return texture;
@@ -1369,15 +1381,59 @@ private:
 	}
 
 
+	void GetModelBoundingBox(int sequence, XMFLOAT3& mins, XMFLOAT3& maxs)
+	{
+		if (!m_D3DStudioModel)
+			return;
+
+		if (!m_D3DStudioModel->GetStudioModel())
+			return;
+
+		auto header = m_D3DStudioModel->GetStudioModel()->GetStudioHeader();
+
+		if (header->numseq == 0)
+			return;
+
+		if (sequence < 0 || sequence > header->numseq - 1)
+			return;
+
+		auto psequence = reinterpret_cast<mstudioseqdesc_t*>(reinterpret_cast<byte*>(header) + header->seqindex) + sequence;
+
+		mins.x = psequence->bbmin[0];
+		mins.y = psequence->bbmin[1];
+		mins.z = psequence->bbmin[2];
+		maxs.x = psequence->bbmax[0];
+		maxs.y = psequence->bbmax[1];
+		maxs.z = psequence->bbmax[2];
+	}
+
+
 	void SetCamera()
 	{
 		m_World = XMMatrixScaling(-1, 1, 1); // Make Right-Handed Coordinate System
 
+		XMFLOAT3 mins{};
+		XMFLOAT3 maxs{};
+
+		GetModelBoundingBox(0, mins, maxs);
+
+		XMFLOAT3 center{};
+		center.x = (mins.x + maxs.x) / 2.0f;
+		center.y = (mins.y + maxs.y) / 2.0f;
+		center.z = (mins.z + maxs.z) / 2.0f;
+
+		float width = maxs.x - mins.x; // y?
+		float height = maxs.z - mins.z;
+
+		if (width > height)
+			height = width;
+
 		XMVECTOR Eye = XMVectorSet(-50.0f, 0.0f, 0.0f, 0.0f);
-		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(center.x, center.y, center.z, 0.0f);
 		XMVECTOR Up = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); // Z up
 
 		float fov = 65;
+		float cameraDistance = (height / 2.0f) / tan(fov / 2.0f) * 4.0f;
 
 		auto category = GuessModelCategory();
 
@@ -1388,6 +1444,8 @@ private:
 				At = XMVectorSet(-5.0f, 1.4f, 1.0f, 0.0f);
 				fov = 90;
 				break;
+			default:
+				Eye = XMVectorSet(-cameraDistance, 0.0f, 0.0f, 0.0f);
 		}
 
 		m_View = XMMatrixLookAtLH(Eye, At, Up);
