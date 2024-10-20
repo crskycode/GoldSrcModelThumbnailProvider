@@ -7,6 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoldSrcModelThumbnailProvid
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{347990A1-3CB5-4619-A14A-D5DD25A6EF57}"
 	ProjectSection(SolutionItems) = preProject
+		preview.png = preview.png
 		README.md = README.md
 	EndProjectSection
 EndProject
