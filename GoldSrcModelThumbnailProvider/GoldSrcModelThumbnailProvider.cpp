@@ -12,6 +12,8 @@
 #include <msxml6.h>
 #include <new>
 #include <string>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "windowscodecs.lib")
@@ -32,6 +34,16 @@ public:
 	CModelThumbProvider()
 		: _cRef(1)
 	{
+		char szLogPath[1024];
+		GetTempPathA(ARRAYSIZE(szLogPath), szLogPath);
+		PathAddBackslashA(szLogPath);
+		strcat_s(szLogPath, "GoldSrcModelThumbnailProvider.log");
+
+		spdlog::set_default_logger(spdlog::basic_logger_mt("GoldSrcModelThumbnailProvider", szLogPath));
+		spdlog::set_level(spdlog::level::trace);
+		spdlog::flush_on(spdlog::level::trace);
+
+		spdlog::info("Call CModelThumbProvider");
 	}
 
 	virtual ~CModelThumbProvider()
@@ -91,10 +103,14 @@ HRESULT CModelThumbProvider_CreateInstance(REFIID riid, void** ppv)
 // IInitializeWithFile
 IFACEMETHODIMP CModelThumbProvider::Initialize(LPCWSTR pszFilePath, DWORD)
 {
+	spdlog::info("Call CModelThumbProvider::Initialize");
+
 	if (pszFilePath == NULL || pszFilePath[0] == 0)
 		return E_UNEXPECTED;
 
 	m_FilePath = pszFilePath;
+
+	spdlog::info(L"Initialize: {}", m_FilePath);
 
 	return S_OK;
 }
@@ -108,12 +124,14 @@ IFACEMETHODIMP CModelThumbProvider::GetThumbnail(UINT cx, HBITMAP* phbmp, WTS_AL
 			cx = 64;
 
 		HRESULT hr = RenderToBitmap(m_FilePath, cx, cx, phbmp);
+		spdlog::trace("Call RenderToBitmap at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
+		spdlog::error("Error in CModelThumbProvider::GetThumbnail");
 		return E_UNEXPECTED;
 	}
 

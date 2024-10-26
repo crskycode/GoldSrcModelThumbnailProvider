@@ -1052,6 +1052,7 @@ private:
 		bufferData.pSysMem = studioMesh.Indices.data();
 
 		auto hr = device->CreateBuffer(&ibd, &bufferData, mesh.IndexBuffer.ReleaseAndGetAddressOf());
+		spdlog::trace("Call device->CreateBuffer at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return {};
@@ -1075,6 +1076,7 @@ private:
 		bufferData.pSysMem = studioModel.Vertices.data();
 
 		auto hr = device->CreateBuffer(&vbd, &bufferData, model.VertexBuffer.ReleaseAndGetAddressOf());
+		spdlog::trace("Call device->CreateBuffer at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return {};
@@ -1142,11 +1144,13 @@ private:
 		HRESULT hr;
 
 		hr = device->CreateTexture2D(&desc, &textureData, texture.Texture.ReleaseAndGetAddressOf());
+		spdlog::trace("Call device->CreateTexture2D at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return {};
 
 		hr = device->CreateShaderResourceView(texture.Texture.Get(), nullptr, texture.View.ReleaseAndGetAddressOf());
+		spdlog::trace("Call device->CreateShaderResourceView at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return {};
@@ -1277,11 +1281,13 @@ private:
 		// auto pixelShaderBytecode = ReadAllBytes("PixelShader.cso");
 
 		hr = m_D3DDevice->CreateVertexShader(vertexShaderBytecode, sizeof(vertexShaderBytecode), nullptr, m_VertexShader.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateVertexShader at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
 
 		hr = m_D3DDevice->CreatePixelShader(pixelShaderBytecode, sizeof(pixelShaderBytecode), nullptr, m_PixelShader.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreatePixelShader at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1299,6 +1305,7 @@ private:
 		};
 
 		hr = m_D3DDevice->CreateInputLayout(ied, ARRAYSIZE(ied), vertexShaderBytecode, sizeof(vertexShaderBytecode), m_InputLayout.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateInputLayout at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1322,6 +1329,7 @@ private:
 		bd.CPUAccessFlags = 0;
 
 		hr = m_D3DDevice->CreateBuffer(&bd, nullptr, m_MatrixBuffer.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateBuffer at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1332,6 +1340,7 @@ private:
 		bd.CPUAccessFlags = 0;
 
 		hr = m_D3DDevice->CreateBuffer(&bd, nullptr, m_BoneBuffer.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateBuffer at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1350,6 +1359,7 @@ private:
 		sd.MaxLOD = D3D11_FLOAT32_MAX;
 
 		hr = m_D3DDevice->CreateSamplerState(&sd, m_SamplerState.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateSamplerState at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1369,6 +1379,7 @@ private:
 		blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		hr = m_D3DDevice->CreateBlendState(&blend, m_BlendState.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateBlendState at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -1473,7 +1484,7 @@ private:
 				fov = 90;
 				break;
 			default:
-				Eye = XMVectorSet(-cameraDistance, 0.0f, cameraDistance * 0.5, 0.0f);
+				Eye = XMVectorSet(-cameraDistance, 0.0f, cameraDistance * 0.5f, 0.0f);
 		}
 
 		m_View = XMMatrixLookAtLH(Eye, At, Up);
@@ -1680,11 +1691,13 @@ public:
 		m_D3DDeviceContext = deviceContext;
 
 		hr = InitPipeline();
+		spdlog::trace("Call InitPipeline at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
 
 		hr = InitGraphics();
+		spdlog::trace("Call InitGraphics at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;

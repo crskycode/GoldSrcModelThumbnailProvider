@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <string>
+#include <spdlog/spdlog.h>
 
 #include "StudioModelRenderer.hpp"
 
@@ -89,6 +90,7 @@ private:
 				break;
 		}
 
+		spdlog::trace("Call D3D11CreateDevice at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 		if (FAILED(hr))
 			return hr;
 
@@ -101,6 +103,7 @@ private:
 
 		UINT m4xMsaaQuality;
 		hr = m_D3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m4xMsaaQuality);
+		spdlog::trace("Call m_D3DDevice->CheckMultisampleQualityLevels at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -120,6 +123,7 @@ private:
 		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
 		hr = m_D3DDevice->CreateTexture2D(&desc, NULL, m_RenderTargetTexture.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateTexture2D at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -133,6 +137,7 @@ private:
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 
 		hr = m_D3DDevice->CreateTexture2D(&desc, NULL, m_BufferTexture.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateTexture2D at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -142,6 +147,7 @@ private:
 		//
 
 		hr = m_D3DDevice->CreateRenderTargetView(m_RenderTargetTexture.Get(), NULL, m_RenderTargetView.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateRenderTargetView at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -164,6 +170,7 @@ private:
 		dstd.MiscFlags = 0;
 
 		hr = m_D3DDevice->CreateTexture2D(&dstd, nullptr, m_DepthStencilTexture.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateTexture2D at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -178,6 +185,7 @@ private:
 		dsvd.Texture2D.MipSlice = 0;
 
 		hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencilTexture.Get(), 0, m_DepthStencilView.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateDepthStencilView at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -210,6 +218,7 @@ private:
 		rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 		hr = m_D3DDevice->CreateRasterizerState(&rasterDesc, m_RasterizerState.ReleaseAndGetAddressOf());
+		spdlog::trace("Call m_D3DDevice->CreateRasterizerState at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -352,11 +361,13 @@ private:
 		UINT resourceId = D3D11CalcSubresource(0, 0, 0);
 
 		hr = m_D3DDeviceContext->Map(m_BufferTexture.Get(), resourceId, D3D11_MAP_READ, 0, &res);
+		spdlog::trace("Call m_D3DDeviceContext->Map at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
 
 		hr = CreateDIB(desc.Width, desc.Height, res.pData, res.RowPitch, outBitmap);
+		spdlog::trace("Call CreateDIB at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		m_D3DDeviceContext->Unmap(m_BufferTexture.Get(), resourceId);
 
@@ -372,6 +383,7 @@ private:
 		m_d3dStudioModel = std::make_unique<D3DStudioModel>();
 
 		hr = m_d3dStudioModelRenderer->Init(m_D3DDevice.Get(), m_D3DDeviceContext.Get());
+		spdlog::trace("Call m_d3dStudioModelRenderer->Init at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 		if (FAILED(hr))
 			return hr;
@@ -400,11 +412,13 @@ public:
 			m_ViewHeight = height;
 
 			hr = InitD3D();
+			spdlog::trace("Call InitD3D at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 			if (FAILED(hr))
 				throw std::runtime_error("Failed to initialize D3D.");
 
 			hr = LoadModel(filePath);
+			spdlog::trace("Call LoadModel at {} line {} result {}", __FUNCTION__, __LINE__, hr);
 
 			if (FAILED(hr))
 				throw std::runtime_error("Failed to load model.");
